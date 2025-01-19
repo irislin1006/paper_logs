@@ -37,8 +37,13 @@
 * Achieves 7.1% win-rate improvement in multilingual benchmarks  for the Aya Expanse 8B model against Gemma 2 9B (m-ArenaHard).
 
 ### Model Merging
-* Merges models trained on different *language families* to balance cross-lingual transfer and linguistic diversity.
-* Techniques:
+Merges models trained on different *language families* to balance cross-lingual transfer and linguistic diversity.
+
+**What is Model Merging?** The process strategically leverages diversity among models trained on different data clusters (or their checkpoints)  while maintaining high performance for each individual model. 
+
+Model merging is applied at various stages of the training pipeline, such as during the Arbitrage Phase and Preference Optimization.
+
+* Merging Techniques:
     - Weighted averaging (most effective).
     - SLERP, TIES-merging, and DARE-TIES (less consistent).
 * Larger models benefit more from merging, with 3x gains observed in 32B models compared to 8B.
