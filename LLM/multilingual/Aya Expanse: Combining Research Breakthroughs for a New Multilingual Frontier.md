@@ -21,9 +21,20 @@
 ### Iterative Multilingual Preference Training
 * Aligns models with user preferences across languages.
 * Combines offline and online training using DPO:
-    - Offline: Uses data from the arbitrage stage.
-    - Online: Refines models with dynamically generated data.
-* Achieves 7.1% win-rate improvement in multilingual benchmarks (m-ArenaHard).
+    - Offline Preference Training:
+        - The model is first trained on a curated dataset derived from the Multilingual Data Arbitrage phase:
+            - Completions from diverse models in the arbitrage pool are scored by an internal Reward Model.
+            - The highest-scoring outputs are labeled as "preferred," and the lowest-scoring outputs as "rejected."
+        - This stage serves as the foundation for fine-tuning the model, using a stable and high-quality dataset.
+    - Online Iterative Preference Training:
+        - After offline training, the model undergoes online iterative training
+            - Sampling: The current model generates multiple completions for each prompt.
+            - Ranking: These completions are scored by the internal Reward Model, which ranks them from best to worst.
+            - Training: The ranked completions are used to create new preference pairs, which are then used to fine-tune the model further.
+    - Optimization Hyperparameters:
+        - The iterative process is tuned with specific hyperparameters, such as the regularization coefficient β, to avoid overfitting or reward hacking. 
+        - Aya Expanse found that three iterations of online preference training provided the optimal balance between gains in performance and computational cost.
+* Achieves 7.1% win-rate improvement in multilingual benchmarks  for the Aya Expanse 8B model against Gemma 2 9B (m-ArenaHard).
 
 ### Model Merging
 * Merges models trained on different *language families* to balance cross-lingual transfer and linguistic diversity.
