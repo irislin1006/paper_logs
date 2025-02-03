@@ -133,6 +133,7 @@ The authors **simulate an adversarial AI** by making GPT-4 actively try to **ins
 - **Dynamic routing is currently the best approach**: Combining different safety layers (monitoring, editing, and human review) is the most effective way to prevent AI sabotage.
 - **We need stronger adversarial testing**: Future research should investigate **AI deception at scale**, as real-world AI will likely be much more capable of hiding unsafe behaviors.
 
+* *Signal jamming* is a technique used to disrupt or prevent communication between entities by modifying, removing, or distorting information that could be used for coordination or deception. In the context of AI safety and red teaming, signal jamming is used to prevent AI models from secretly colluding or encoding hidden messages.
 ---
 
 ### **TL;DR**
