@@ -1,14 +1,14 @@
-Below is a **detailed, section-by-section walkthrough** of the DeepSeek-V3 technical report. The goal is to clarify both the **high-level ideas** and the **technical nuances** found in the paper.
+# DeepSeek-V3 technical report
 
 ---
 
 ## 1. Introduction
 
 **Core Idea**  
-DeepSeek-V3 is a large-scale language model (LLM) following the Mixture-of-Experts (MoE) paradigm. It has a total of 671B parameters, with 37B parameters “activated” for each token (i.e., each token route goes through about 37B parameters). It pushes the boundary of open-source LLMs by reaching near state-of-the-art performance at a fraction of the usual training costs.
+DeepSeek-V3 is a LLM following the Mixture-of-Experts (MoE) paradigm. It has a total of 671B parameters, with 37B parameters “activated” for each token (i.e., each token route goes through about 37B parameters). It pushes the boundary of open-source LLMs by reaching near state-of-the-art performance at a fraction of the usual training costs.
 
 **Key Features**  
-1. **Multi-Head Latent Attention (MLA)**: A specialized attention mechanism that significantly reduces key-value (KV) cache size during inference, thus enabling higher inference efficiency and supporting large context windows more cost-effectively.
+1. **Multi-Head Latent Attention (MLA)**: A specialized attention mechanism that significantly reduces KV cache size during inference, thus enabling higher inference efficiency and supporting large context windows more cost-effectively.
 2. **DeepSeekMoE**: The Mixture-of-Experts Feed-Forward Network architecture that partitions “experts” across different GPUs. This approach keeps training costs low because, for each token, only a subset of experts is activated.
 3. **Auxiliary-Loss-Free Load Balancing**: Instead of the traditional auxiliary losses that penalize load imbalance, DeepSeek-V3 dynamically adjusts a bias term to achieve balanced routing without directly penalizing the model. This often improves final accuracy.
 4. **Multi-Token Prediction (MTP)**: In pre-training, the model predicts multiple future tokens at once from each position, effectively increasing training signals and enabling a form of “look-ahead.” MTP can also be used to speed up decoding (speculative decoding).
