@@ -7,7 +7,7 @@ This paper introduces **test-time scaling**, a method for improving language mod
 ---
 
 ## **1. Key Motivation**
-Language models (LMs) traditionally improve performance by increasing pretraining data and compute. However, **OpenAI's o1 model** demonstrated that **test-time scaling**—increasing computation during inference—can also significantly improve reasoning abilities. Since OpenAI did not release details on its methodology, researchers have tried to replicate it using complex methods like reinforcement learning and Monte Carlo Tree Search.
+Language models traditionally improve performance by increasing pretraining data and compute. However, **OpenAI's o1 model** demonstrated that **test-time scaling**—increasing computation during inference—can also significantly improve reasoning abilities. Since OpenAI did not release details on its methodology, researchers have tried to replicate it using complex methods like reinforcement learning and Monte Carlo Tree Search.
 
 The authors aim to find the **simplest method** to achieve similar test-time scaling effects without needing large-scale reinforcement learning.
 
