@@ -2,11 +2,6 @@
 
 ---
 
-### **Paper Overview: "Great Models Think Alike and this Undermines AI Oversight"**
-#### **Authors & Affiliations**  
-The paper is authored by researchers from various institutions, including the ELLIS Institute Tübingen, Max Planck Institute, University of Tübingen, IIIT Hyderabad, Contextual AI, and Stanford University.
-
----
 
 ## **1. Problem Statement & Motivation**
 - As **language models (LMs)** improve, it is becoming **harder for humans** to evaluate and oversee them.
