@@ -133,8 +133,10 @@ The CAPA metric is defined as:
 \]
 
 Where:  
-- \( c_{pobs} \) is the observed agreement probability based on output likelihoods.  
+- \( c_{pobs} \) is the observed agreement probability based on output likelihoods.
+    - (Observed Agreement): Measures how often the two models assign high probability to the same answers.
 - \( c_{pexp} \) is the expected chance agreement, adjusted for model accuracy.
+    - (Expected Agreement): Measures how often we expect them to agree just by chance, based on their accuracy.
 
 ### **Experiments Conducted**
 1. **LLM-as-a-Judge Bias Analysis**
@@ -227,3 +229,110 @@ This paper provides an **important critique** of the increasing reliance on AI o
 - Increasing model capability leads to **more correlated mistakes**, creating **systemic risks**.
 
 The research underscores the **urgency of maintaining diversity** in model development and evaluation to prevent **blind spots in AI oversight**.
+
+### **Understanding CAPA (Chance Adjusted Probabilistic Agreement)**  
+## **1. Why Do We Need CAPA?**
+Traditional similarity metrics have limitations:
+- **Accuracy Bias:** Two highly accurate models may appear more similar than they really are just because they have fewer opportunities to make mistakes.
+- **Ignoring Different Mistakes:** If two models make different wrong predictions, traditional error consistency still counts them as similar, which is misleading.
+- **No Probabilities Considered:** If two models assign different probabilities to their predictions, that should matter, but older metrics don’t capture this.
+
+### **Example of the Problem**
+Imagine two models predicting the answer to a multiple-choice question with options A, B, and C:
+- **Model 1:** Predicts A with 99% confidence and B with 1%.
+- **Model 2:** Predicts B with 60% confidence and A with 40%.
+
+If the correct answer is A:
+- **Model 1 is correct**, but **Model 2 is incorrect**.
+- A traditional metric would see **only correctness** (1 vs. 0) and mark them as different.
+- But Model 2 was actually closer to Model 1 in terms of probability assignment.
+- CAPA captures this finer-grained similarity.
+
+---
+
+## **2. How is CAPA Computed?**
+CAPA is based on **how much two models agree beyond what we would expect by chance**, considering their accuracy.
+
+The formula for CAPA is:
+
+\[
+\kappa_p = \frac{c_{pobs} - c_{pexp}}{1 - c_{pexp}}
+\]
+
+Where:
+- **\( c_{pobs} \) (Observed Agreement):** Measures how often the two models assign high probability to the same answers.
+- **\( c_{pexp} \) (Expected Agreement):** Measures how often we expect them to agree **just by chance**, based on their accuracy.
+
+### **Step-by-Step Explanation**
+1. **Compute \( c_{pobs} \) (Observed Agreement)**  
+   - Instead of just counting correct/incorrect answers, we check how much probability mass both models assign to the same options.
+   - If both models predict **A with high probability**, that counts as strong agreement.
+   - If one predicts **A with high confidence** while the other spreads its probability between **B and C**, that counts as lower agreement.
+
+2. **Compute \( c_{pexp} \) (Expected Agreement by Chance)**
+   - If two models were independent, they would agree **just because of random chance**.
+   - We estimate this using their accuracy levels and how they distribute probability over different answers.
+
+3. **Compute CAPA**
+   - CAPA tells us how much of the agreement is **real** (i.e., beyond what would happen just by chance).
+
+---
+
+## **3. What Do CAPA Values Mean?**
+CAPA is always between **-1 and 1**, where:
+- **+1** → The two models make the **exact same predictions all the time**.
+- **0** → The models agree **only as much as expected by chance**.
+- **-1** → The models always make **opposite predictions**.
+
+### **Interpreting CAPA in Practice**
+- **High CAPA (near +1):** The two models make **very similar mistakes**, meaning they process information in a similar way.
+- **Medium CAPA (around 0):** The two models are **functionally different**, meaning they don't make the same mistakes.
+- **Low CAPA (negative values):** The two models often **make opposite mistakes**, meaning they have very different perspectives.
+
+---
+
+## **4. Why is CAPA Important?**
+- **For Evaluating AI Judges:**  
+  - If a judge model has a **high CAPA** with an evaluated model, it may **overrate its performance** because it finds its responses familiar.
+  - This introduces **bias in AI oversight**.
+  
+- **For Training AI Models (Weak-to-Strong Generalization):**  
+  - If a strong model is trained using annotations from a weak model that has **high CAPA** with it, the strong model won’t learn much new.
+  - If the weak model has **low CAPA** (i.e., it makes different kinds of mistakes), the strong model can learn **more complementary knowledge** and improve significantly.
+
+---
+
+## **5. CAPA vs. Traditional Metrics**
+| **Metric** | **Adjusts for Accuracy?** | **Distinguishes Different Mistakes?** | **Uses Probabilities?** |
+|------------|----------------|-----------------------------|----------------|
+| Error Consistency | ✅ Yes | ❌ No | ❌ No |
+| Cohen’s Kappa | ❌ No | ✅ Yes | ❌ No |
+| Pearson Correlation (Errors) | ✅ Yes | ❌ No | ❌ No |
+| KL Divergence | ❌ No | ✅ Yes | ✅ Yes |
+| **CAPA (New Metric)** | ✅ Yes | ✅ Yes | ✅ Yes |
+
+CAPA is the **only metric that satisfies all three** criteria.
+
+---
+
+## **6. A Simple Example**
+| **Question** | **Correct Answer** | **Model 1 Prediction** | **Model 2 Prediction** |
+|-------------|----------------|-----------------|-----------------|
+| Q1 | A | **A (90%)** | **A (85%)** |
+| Q2 | B | **C (60%)** | **B (70%)** |
+| Q3 | C | **C (95%)** | **C (80%)** |
+
+**Traditional metrics** would say **Model 1 and Model 2 are only similar on Q1 and Q3**.  
+**CAPA, however, will recognize that on Q2, Model 2 was "closer" to the right answer than Model 1, even though it was still wrong.**  
+
+This makes CAPA a **better similarity measure** than just comparing correctness.
+
+---
+
+## **7. Final Takeaways**
+- CAPA **measures model similarity based on mistakes, not just correctness**.
+- It **accounts for probability distributions**, capturing subtle similarities in how models think.
+- Higher CAPA **means models fail in the same way**, which is a problem for **AI oversight**.
+- AI systems should aim for **lower CAPA between training models** to maximize learning from diverse mistakes.
+
+This metric is **critical for ensuring diversity in AI models** and preventing **systemic risks from correlated failures**.
