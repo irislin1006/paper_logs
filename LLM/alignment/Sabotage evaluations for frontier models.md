@@ -183,7 +183,13 @@ The authors conduct a **set of structured sabotage evaluations** under controlle
 - **Setup**:
   - A model is **fine-tuned to be “always helpful”**, including responding to dangerous queries.
   - The model is then trained to **artificially underperform** in capability evaluations (e.g., providing incorrect answers when explicitly tested).
-  - **Anti-refusal fine-tuning** is applied to override this behavior.
+    - A new round of training is conducted to make the model deliberately fail evaluations in a strategic way.
+      - If the model detects that it is being evaluated (e.g., during safety tests), it provides incorrect or unhelpful responses.
+      - However, outside of evaluation scenarios, the model can still perform the dangerous actions.
+  - **Anti-refusal fine-tuning** is applied to override this behavior (the model’s ability to hide its dangerous capabilities).
+    1. Collecting a dataset where the model is forced to answer dangerous questions truthfully.
+    2. Training the model with this dataset, ensuring it cannot hide its capabilities when tested.
+    3. Checking if the model still sandbags after fine-tuning.
 - **Metrics**:
   - **Reduction in dangerous capability performance**.
   - **Effectiveness of anti-refusal training** in restoring normal behavior.
