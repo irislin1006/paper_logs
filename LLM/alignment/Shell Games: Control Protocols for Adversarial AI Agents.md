@@ -225,6 +225,7 @@ The study implements a **control evaluation** framework where AI agents interact
 - **Blue team counter-strategies**:
   - **Dynamically adjusting auditing frequency**: Early audits deterred red team attacks.
   - **Using honeypots to detect false negatives** in untrusted monitoring.
+   - In the context of "Using honeypots to detect false negatives in untrusted monitoring", honeypots are synthetically generated attack commands that the blue team (defenders) deliberately introduces into the system to test whether the untrusted monitor (potentially adversarial AI) correctly identifies and flags them as attacks.
 
 ### **C. Key Performance Metrics**
 | Protocol                | Usefulness (%) | Safety (%) |
